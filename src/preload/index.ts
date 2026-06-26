@@ -3,7 +3,9 @@ import type {
   AphorismEntry,
   AphorismTag,
   CreateEntryInput,
-  CreateTagInput
+  CreateTagInput,
+  ListEntriesInput,
+  ListEntriesResult
 } from "../shared/types";
 
 contextBridge.exposeInMainWorld("aphorisms", {
@@ -11,6 +13,9 @@ contextBridge.exposeInMainWorld("aphorisms", {
   entries: {
     create: (input: CreateEntryInput): Promise<AphorismEntry> => {
       return ipcRenderer.invoke("entries:create", input);
+    },
+    list: (input: ListEntriesInput): Promise<ListEntriesResult> => {
+      return ipcRenderer.invoke("entries:list", input);
     }
   },
   tags: {

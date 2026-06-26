@@ -249,6 +249,130 @@ h2 {
   font-weight: 700;
 }
 
+.entries-browser {
+  margin-top: 40px;
+  padding-top: 36px;
+  border-top: 1px solid #d9d2c4;
+}
+
+.entries-heading-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.entries-heading-row span {
+  color: #6b665c;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.entry-filters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.entry-filters label {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  color: #59554c;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.entry-filters input,
+.entry-filters select {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid #c9c0ad;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1b1b1f;
+  box-sizing: border-box;
+  padding: 0 10px;
+}
+
+.entry-list {
+  margin-top: 24px;
+  border-top: 1px solid #d9d2c4;
+}
+
+.entry-list-item {
+  padding: 20px 0;
+  border-bottom: 1px solid #d9d2c4;
+}
+
+.entry-list-item > p {
+  margin: 10px 0;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.entry-list-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: #6b665c;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.entry-list-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.entry-list-tags span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  border-radius: 999px;
+  padding: 0 10px;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.empty-entries {
+  margin: 0;
+  padding: 24px 0;
+  color: #6b665c;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.pagination button {
+  min-height: 36px;
+  border: 1px solid #c9c0ad;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #25231f;
+  cursor: pointer;
+  padding: 0 14px;
+}
+
+.pagination button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.pagination span {
+  color: #6b665c;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
 @media (max-width: 640px) {
   .app-shell {
     padding: 32px 20px;
@@ -264,5 +388,9 @@ h2 {
 
   .tag-form input[type="color"] {
     width: 100%;
+  }
+
+  .entry-filters {
+    grid-template-columns: 1fr;
   }
 }

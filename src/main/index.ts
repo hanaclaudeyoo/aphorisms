@@ -5,9 +5,16 @@ import {
   initializeDatabase,
   type InitializedDatabase
 } from "./db/database";
-import { createEntry } from "./db/repositories/entriesRepository";
+import {
+  createEntry,
+  listEntries
+} from "./db/repositories/entriesRepository";
 import { createTag, listTags } from "./db/repositories/tagsRepository";
-import type { CreateEntryInput, CreateTagInput } from "../shared/types";
+import type {
+  CreateEntryInput,
+  CreateTagInput,
+  ListEntriesInput
+} from "../shared/types";
 
 let appDatabase: InitializedDatabase | undefined;
 
@@ -44,6 +51,10 @@ const getDatabase = (): InitializedDatabase => {
 const registerIpcHandlers = (): void => {
   ipcMain.handle("entries:create", (_event, input: CreateEntryInput) => {
     return createEntry(getDatabase().db, input);
+  });
+
+  ipcMain.handle("entries:list", (_event, input: ListEntriesInput) => {
+    return listEntries(getDatabase().db, input);
   });
 
   ipcMain.handle("tags:create", (_event, input: CreateTagInput) => {

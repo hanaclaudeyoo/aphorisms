@@ -12,6 +12,23 @@ export interface CreateEntryInput {
   tagIds: string[];
 }
 
+export interface ListEntriesInput {
+  page?: number;
+  pageSize?: number;
+  startDate?: string;
+  endDate?: string;
+  tagId?: string;
+  sortDirection?: "asc" | "desc";
+}
+
+export interface ListEntriesResult {
+  entries: AphorismEntry[];
+  page: number;
+  pageSize: number;
+  totalEntries: number;
+  totalPages: number;
+}
+
 export interface AphorismTag {
   id: string;
   name: string;

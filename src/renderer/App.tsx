@@ -23,6 +23,16 @@ export function App() {
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [createdEntry, setCreatedEntry] = useState<AphorismEntry | null>(null);
   const [entryError, setEntryError] = useState<string | null>(null);
+  const [entries, setEntries] = useState<AphorismEntry[]>([]);
+  const [listPage, setListPage] = useState(1);
+  const [totalEntries, setTotalEntries] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [startDateFilter, setStartDateFilter] = useState("");
+  const [endDateFilter, setEndDateFilter] = useState("");
+  const [tagFilter, setTagFilter] = useState("");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const [listError, setListError] = useState<string | null>(null);
+  const [listRefreshKey, setListRefreshKey] = useState(0);
 
   useEffect(() => {
     window.aphorisms.tags
@@ -32,6 +42,50 @@ export function App() {
         setTagError(caughtError instanceof Error ? caughtError.message : "Failed to load tags.");
       });
   }, []);
+
+  useEffect(() => {
+    let isCurrentRequest = true;
+    setListError(null);
+
+    window.aphorisms.entries
+      .list({
+        page: listPage,
+        pageSize: 5,
+        startDate: startDateFilter || undefined,
+        endDate: endDateFilter || undefined,
+        tagId: tagFilter || undefined,
+        sortDirection
+      })
+      .then((result) => {
+        if (!isCurrentRequest) {
+          return;
+        }
+
+        setEntries(result.entries);
+        setTotalEntries(result.totalEntries);
+        setTotalPages(result.totalPages);
+      })
+      .catch((caughtError: unknown) => {
+        if (isCurrentRequest) {
+          setListError(
+            caughtError instanceof Error
+              ? caughtError.message
+              : "Failed to load entries."
+          );
+        }
+      });
+
+    return () => {
+      isCurrentRequest = false;
+    };
+  }, [
+    endDateFilter,
+    listPage,
+    listRefreshKey,
+    sortDirection,
+    startDateFilter,
+    tagFilter
+  ]);
 
   const handleTagSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -68,6 +122,8 @@ export function App() {
       setCreatedEntry(entry);
       setEntryText("");
       setSelectedTagIds([]);
+      setListPage(1);
+      setListRefreshKey((currentKey) => currentKey + 1);
     } catch (caughtError) {
       setEntryError(
         caughtError instanceof Error ? caughtError.message : "Failed to create entry."
@@ -82,6 +138,8 @@ export function App() {
         : [...currentTagIds, tagId]
     );
   };
+
+  const tagsById = new Map(tags.map((tag) => [tag.id, tag]));
 
   return (
     <main className="app-shell">
@@ -205,6 +263,125 @@ export function App() {
               <time dateTime={createdEntry.entryDate}>{createdEntry.entryDate}</time>
             </div>
           ) : null}
+        </section>
+
+        <section className="entries-browser" aria-labelledby="entries-heading">
+          <div className="entries-heading-row">
+            <h2 id="entries-heading">Entries</h2>
+            <span>{totalEntries} total</span>
+          </div>
+
+          <div className="entry-filters">
+            <label>
+              <span>From</span>
+              <input
+                onChange={(event) => {
+                  setStartDateFilter(event.target.value);
+                  setListPage(1);
+                }}
+                type="date"
+                value={startDateFilter}
+              />
+            </label>
+
+            <label>
+              <span>To</span>
+              <input
+                onChange={(event) => {
+                  setEndDateFilter(event.target.value);
+                  setListPage(1);
+                }}
+                type="date"
+                value={endDateFilter}
+              />
+            </label>
+
+            <label>
+              <span>Tag</span>
+              <select
+                onChange={(event) => {
+                  setTagFilter(event.target.value);
+                  setListPage(1);
+                }}
+                value={tagFilter}
+              >
+                <option value="">All tags</option>
+                {tags.map((tag) => (
+                  <option key={tag.id} value={tag.id}>
+                    {tag.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label>
+              <span>Sort</span>
+              <select
+                onChange={(event) => {
+                  setSortDirection(event.target.value as "asc" | "desc");
+                  setListPage(1);
+                }}
+                value={sortDirection}
+              >
+                <option value="desc">Newest first</option>
+                <option value="asc">Oldest first</option>
+              </select>
+            </label>
+          </div>
+
+          {listError ? <p className="form-error">{listError}</p> : null}
+
+          <div className="entry-list">
+            {entries.map((entry) => (
+              <article className="entry-list-item" key={entry.id}>
+                <div className="entry-list-meta">
+                  <time dateTime={entry.entryDate}>{entry.entryDate}</time>
+                  <span>#{entry.id}</span>
+                </div>
+                <p>{entry.text}</p>
+                {entry.tagIds.length > 0 ? (
+                  <div className="entry-list-tags">
+                    {entry.tagIds.map((tagId) => {
+                      const tag = tagsById.get(tagId);
+
+                      return tag ? (
+                        <span
+                          key={tag.id}
+                          style={{ backgroundColor: tag.colorHex ?? "#777777" }}
+                        >
+                          {tag.name}
+                        </span>
+                      ) : null;
+                    })}
+                  </div>
+                ) : null}
+              </article>
+            ))}
+
+            {!listError && entries.length === 0 ? (
+              <p className="empty-entries">No entries match these filters.</p>
+            ) : null}
+          </div>
+
+          <nav className="pagination" aria-label="Entry pages">
+            <button
+              disabled={listPage <= 1}
+              onClick={() => setListPage((currentPage) => currentPage - 1)}
+              type="button"
+            >
+              Previous
+            </button>
+            <span>
+              Page {listPage} of {Math.max(totalPages, 1)}
+            </span>
+            <button
+              disabled={totalPages === 0 || listPage >= totalPages}
+              onClick={() => setListPage((currentPage) => currentPage + 1)}
+              type="button"
+            >
+              Next
+            </button>
+          </nav>
         </section>
       </div>
     </main>

@@ -2,7 +2,9 @@ import type {
   AphorismEntry,
   AphorismTag,
   CreateEntryInput,
-  CreateTagInput
+  CreateTagInput,
+  ListEntriesInput,
+  ListEntriesResult
 } from "./types";
 
 export {};
@@ -13,6 +15,7 @@ declare global {
       platform: NodeJS.Platform;
       entries: {
         create: (input: CreateEntryInput) => Promise<AphorismEntry>;
+        list: (input: ListEntriesInput) => Promise<ListEntriesResult>;
       };
       tags: {
         create: (input: CreateTagInput) => Promise<AphorismTag>;
