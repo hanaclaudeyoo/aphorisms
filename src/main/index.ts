@@ -1,10 +1,12 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import { join } from "node:path";
 import {
   getDefaultDatabasePath,
   initializeDatabase,
   type InitializedDatabase
 } from "./db/database";
+import { createTag, listTags } from "./db/repositories/tagsRepository";
+import type { CreateTagInput } from "../shared/types";
 
 let appDatabase: InitializedDatabase | undefined;
 
@@ -30,8 +32,27 @@ const createWindow = (): void => {
   }
 };
 
+const getDatabase = (): InitializedDatabase => {
+  if (!appDatabase) {
+    throw new Error("Database has not been initialized.");
+  }
+
+  return appDatabase;
+};
+
+const registerIpcHandlers = (): void => {
+  ipcMain.handle("tags:create", (_event, input: CreateTagInput) => {
+    return createTag(getDatabase().db, input);
+  });
+
+  ipcMain.handle("tags:list", () => {
+    return listTags(getDatabase().db);
+  });
+};
+
 app.whenReady().then(() => {
   appDatabase = initializeDatabase(getDefaultDatabasePath(app.getPath("userData")));
+  registerIpcHandlers();
   createWindow();
 
   app.on("activate", () => {

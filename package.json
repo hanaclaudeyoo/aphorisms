@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "env -u ELECTRON_RUN_AS_NODE electron-vite dev",
     "build": "tsc --noEmit && electron-vite build",
-    "db:init": "tsc -p tsconfig.db.json && node .local/init-db/scripts/init-db.js",
+    "db:init": "tsc -p tsconfig.db.json && env ELECTRON_RUN_AS_NODE=1 electron .local/init-db/scripts/init-db.js",
     "electron:rebuild": "env HOME=.local electron-rebuild -f -w better-sqlite3",
     "postinstall": "env HOME=.local electron-rebuild -f -w better-sqlite3",
     "preview": "env -u ELECTRON_RUN_AS_NODE electron-vite preview",

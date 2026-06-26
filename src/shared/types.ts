@@ -9,6 +9,13 @@ export interface AphorismTag {
   id: string;
   name: string;
   groupId: string;
+  colorHex: string | null;
+}
+
+export interface CreateTagInput {
+  name: string;
+  colorHex: string;
+  groupName: string;
 }
 
 export interface AphorismTagGroup {
