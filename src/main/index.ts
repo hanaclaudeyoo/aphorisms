@@ -1,5 +1,12 @@
 import { app, BrowserWindow } from "electron";
 import { join } from "node:path";
+import {
+  getDefaultDatabasePath,
+  initializeDatabase,
+  type InitializedDatabase
+} from "./db/database";
+
+let appDatabase: InitializedDatabase | undefined;
 
 const createWindow = (): void => {
   const mainWindow = new BrowserWindow({
@@ -24,6 +31,7 @@ const createWindow = (): void => {
 };
 
 app.whenReady().then(() => {
+  appDatabase = initializeDatabase(getDefaultDatabasePath(app.getPath("userData")));
   createWindow();
 
   app.on("activate", () => {
@@ -37,4 +45,8 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
   }
+});
+
+app.on("before-quit", () => {
+  appDatabase?.db.close();
 });

@@ -7,6 +7,9 @@
   "scripts": {
     "dev": "env -u ELECTRON_RUN_AS_NODE electron-vite dev",
     "build": "tsc --noEmit && electron-vite build",
+    "db:init": "tsc -p tsconfig.db.json && node .local/init-db/scripts/init-db.js",
+    "electron:rebuild": "env HOME=.local electron-rebuild -f -w better-sqlite3",
+    "postinstall": "env HOME=.local electron-rebuild -f -w better-sqlite3",
     "preview": "env -u ELECTRON_RUN_AS_NODE electron-vite preview",
     "typecheck": "tsc --noEmit"
   },
@@ -18,6 +21,7 @@
     "sqlite-vec": "^0.1.9"
   },
   "devDependencies": {
+    "@electron/rebuild": "^4.0.4",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^24.0.3",
     "@types/react": "^19.1.8",
