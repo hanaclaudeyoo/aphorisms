@@ -1,7 +1,14 @@
 export interface AphorismEntry {
   id: string;
   text: string;
+  entryDate: string;
   createdAt: string;
+  tagIds: string[];
+}
+
+export interface CreateEntryInput {
+  text: string;
+  entryDate: string;
   tagIds: string[];
 }
 

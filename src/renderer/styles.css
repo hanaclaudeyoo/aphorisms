@@ -32,8 +32,13 @@ select {
   box-sizing: border-box;
 }
 
-.tag-tester {
+.test-workspace {
   width: min(760px, 100%);
+}
+
+.tag-tester {
+  padding-bottom: 36px;
+  border-bottom: 1px solid #d9d2c4;
 }
 
 .eyebrow {
@@ -49,6 +54,12 @@ h1 {
   margin: 0;
   font-size: 3.5rem;
   line-height: 1;
+  letter-spacing: 0;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.5rem;
   letter-spacing: 0;
 }
 
@@ -128,6 +139,114 @@ h1 {
   margin: 14px 0 0;
   color: #b42318;
   font-size: 0.95rem;
+}
+
+.entry-tester {
+  padding-top: 36px;
+}
+
+.entry-form {
+  display: grid;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.entry-form textarea,
+.date-field input {
+  border: 1px solid #c9c0ad;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1b1b1f;
+  box-sizing: border-box;
+}
+
+.entry-form textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 12px;
+  line-height: 1.5;
+}
+
+.date-field {
+  display: grid;
+  gap: 6px;
+  width: fit-content;
+  color: #59554c;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.date-field input {
+  min-height: 40px;
+  padding: 0 10px;
+}
+
+.entry-tags {
+  min-width: 0;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.entry-tags legend {
+  margin-bottom: 8px;
+  color: #59554c;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.tag-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 34px;
+  border-radius: 999px;
+  padding: 0 12px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.tag-option input {
+  margin: 0;
+}
+
+.save-entry-button {
+  width: fit-content;
+  min-height: 40px;
+  border: 0;
+  border-radius: 6px;
+  background: #25231f;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 0 18px;
+}
+
+.saved-entry {
+  margin-top: 24px;
+  border-left: 3px solid #4f8ef7;
+  padding-left: 16px;
+}
+
+.saved-entry p {
+  margin: 6px 0;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.saved-entry .saved-label,
+.saved-entry time {
+  color: #6b665c;
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
 @media (max-width: 640px) {
